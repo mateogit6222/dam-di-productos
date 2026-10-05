@@ -15,7 +15,7 @@ import { ProductService } from '../../services/product.service';
   styleUrls: ['./productos.page.scss'],
   standalone: true,
   imports: [
-    CurrencyPipe, IonHeader, IonToolbar, IonTitle, IonContent, 
+    CurrencyPipe, RouterLink, IonHeader, IonToolbar, IonTitle, IonContent, // <-- Aquí está RouterLink
     IonButtons, IonBackButton, IonSpinner, IonCard, IonCardHeader, 
     IonCardTitle, IonCardContent, IonButton
   ]
@@ -28,14 +28,22 @@ export class ProductosPage implements OnInit {
   loading = false;
   error = '';
 
+  limit = 10;
+  skip = 0;
+  currentPage = 1;
+
   ngOnInit(): void {
     this.loadProducts();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.total / this.limit);
   }
 
   loadProducts(): void {
     this.loading = true;
     this.error = '';
-    this.productService.getProducts().subscribe({
+    this.productService.getProducts(this.limit, this.skip).subscribe({
       next: (response: ProductsResponse) => {
         this.products = response.products;
         this.total = response.total;
@@ -50,6 +58,22 @@ export class ProductosPage implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  nextPage(): void {
+    if (this.skip + this.limit < this.total) {
+      this.skip += this.limit;
+      this.currentPage++;
+      this.loadProducts();
+    }
+  }
+
+  prevPage(): void {
+    if (this.skip > 0) {
+      this.skip -= this.limit;
+      this.currentPage--;
+      this.loadProducts();
+    }
   }
 
   calcularValorStock(producto: Product): number {

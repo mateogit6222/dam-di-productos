@@ -68,6 +68,19 @@
         </tbody>
       </table>
     </div>
+
+    <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin: 20px 0;">
+      <ion-button (click)="prevPage()" [disabled]="skip === 0" fill="outline">
+        Anterior
+      </ion-button>
+      
+      <span>Página {{ currentPage }} de {{ totalPages }}</span>
+      
+      <ion-button (click)="nextPage()" [disabled]="skip + limit >= total" fill="outline">
+        Siguiente
+      </ion-button>
+    </div>
+
     <ion-button routerLink="/inicio" expand="block" class="ion-margin-top">
       Volver a la página de Inicio
     </ion-button>
