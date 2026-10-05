@@ -4,6 +4,12 @@
       <ion-back-button defaultHref="/inicio"></ion-back-button>
     </ion-buttons>
     <ion-title>Productos</ion-title>
+    <!-- Botón de Modo Oscuro -->
+    <ion-buttons slot="end">
+      <ion-button (click)="themeService.toggleTheme()">
+        <ion-icon slot="icon-only" [name]="themeService.isDarkMode ? 'sunny-outline' : 'moon-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -31,43 +37,29 @@
 
   @if (!loading && !error) {
     <p>Productos cargados: <strong>{{ products.length }}</strong></p>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Producto</th>
-            <th>Categoría</th>
-            <th>Marca</th>
-            <th>Precio</th>
-            <th>Valoración</th>
-            <th>Stock</th>
-            <th>Dimensiones (AnxAl)</th>
-            <th>Valor Stock</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (product of products; track product.id) {
-            <tr>
-              <td>{{ product.id }}</td>
-              <td>
-                <div class="product">
-                  <img [src]="product.thumbnail" [alt]="product.title">
-                  <span>{{ product.title }}</span>
-                </div>
-              </td>
-              <td>{{ product.category }}</td>
-              <td>{{ product.brand || 'Sin marca' }}</td>
-              <td>{{ product.price | currency: 'EUR' }}</td>
-              <td>{{ product.rating }}</td>
-              <td>{{ product.stock }}</td>
-              <td>{{ product.dimensions?.width }} x {{ product.dimensions?.height }}</td>
-              <td>{{ calcularValorStock(product) | currency: 'EUR' }}</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+    
+    <!-- Nuevo diseño basado en Grid y Cards -->
+    <ion-grid>
+      <ion-row>
+        @for (product of products; track product.id) {
+          <ion-col size="12" size-md="6" size-lg="4">
+            <ion-card>
+              <img [src]="product.thumbnail" [alt]="product.title" class="card-img" />
+              <ion-card-header>
+                <ion-card-subtitle>{{ product.brand || 'Sin marca' }} | {{ product.category }}</ion-card-subtitle>
+                <ion-card-title>{{ product.title }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <p><strong>Precio:</strong> {{ product.price | currency: 'EUR' }}</p>
+                <p><strong>Stock valorado:</strong> {{ calcularValorStock(product) | currency: 'EUR' }}</p>
+                <p><strong>Dimensiones:</strong> {{ product.dimensions?.width }} x {{ product.dimensions?.height }}</p>
+                <p><strong>Stock:</strong> {{ product.stock }} ud. | <strong>Estrellas:</strong> {{ product.rating }}</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
 
     <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin: 20px 0;">
       <ion-button (click)="prevPage()" [disabled]="skip === 0" fill="outline">
