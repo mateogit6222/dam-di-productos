@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { 
   IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, 
   IonBackButton, IonSpinner, IonCard, IonCardHeader, 
@@ -49,5 +50,10 @@ export class ProductosPage implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  calcularValorStock(producto: Product): number {
+    const precioConDescuento = producto.price * (1 - (producto.discountPercentage / 100));
+    return producto.stock * precioConDescuento;
   }
 }

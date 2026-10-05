@@ -9,6 +9,11 @@ export interface Product {
   stock: number;
   brand: string;
   thumbnail: string;
+  dimensions: {
+    width: number;
+    height: number;
+    depth: number;
+  };
 }
 
 export interface ProductsResponse {

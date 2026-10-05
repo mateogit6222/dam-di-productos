@@ -42,6 +42,8 @@
             <th>Precio</th>
             <th>Valoración</th>
             <th>Stock</th>
+            <th>Dimensiones (AnxAl)</th>
+            <th>Valor Stock</th>
           </tr>
         </thead>
         <tbody>
@@ -59,10 +61,15 @@
               <td>{{ product.price | currency: 'EUR' }}</td>
               <td>{{ product.rating }}</td>
               <td>{{ product.stock }}</td>
+              <td>{{ product.dimensions?.width }} x {{ product.dimensions?.height }}</td>
+              <td>{{ calcularValorStock(product) | currency: 'EUR' }}</td>
             </tr>
           }
         </tbody>
       </table>
     </div>
+    <ion-button routerLink="/inicio" expand="block" class="ion-margin-top">
+      Volver a la página de Inicio
+    </ion-button>
   }
 </ion-content>
